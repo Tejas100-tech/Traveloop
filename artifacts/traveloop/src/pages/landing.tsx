@@ -1,39 +1,79 @@
 import { Button } from "@/components/ui/button";
-import { Compass, Map, Plane, Calendar, Star, Users, Shield } from "lucide-react";
+import { Map, MapPin, Users, Star, Bell, Wifi, Shield, Globe, Compass, Route, Activity, Calendar } from "lucide-react";
 import { useAuth } from "@workspace/replit-auth-web";
 import { Link } from "wouter";
+import { PlaceImage } from "@/components/place-image";
+import { PLACES } from "@/data/places";
 
-const INDIA_DESTINATIONS = [
+/**
+ * Landing gallery. Ids resolve against the shared place catalogue, so each tile
+ * shows a photograph of that actual destination rather than generic scenery.
+ */
+const HIDDEN_GEMS = [
+  { id: "mawlynnong", tag: "Asia's Cleanest Village" },
+  { id: "spiti", tag: "Cold Desert Paradise" },
+  { id: "gondeshwar", tag: "12th-Century Temple" },
+  { id: "palitana", tag: "3,800 Steps to Marble" },
+  { id: "gokarna", tag: "Hidden Coastal Gem" },
+  { id: "hampi", tag: "UNESCO Heritage Site" },
+];
+
+const FEATURES = [
   {
-    name: "Taj Mahal, Agra",
-    image: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80",
-    tag: "UNESCO Heritage",
+    icon: Map,
+    title: "Interactive Map Display",
+    description: "Explore destinations visually with real-time map integration. Pin, zoom, and discover hidden gems nearby.",
+    color: "bg-emerald-100 text-emerald-600",
   },
   {
-    name: "Jaipur, Rajasthan",
-    image: "https://images.unsplash.com/photo-1477587458883-47145ed94245?w=600&q=80",
-    tag: "Pink City",
+    icon: Route,
+    title: "Route & Time Calculator",
+    description: "Plan your journey with accurate travel time estimates between destinations, including mode of transport.",
+    color: "bg-blue-100 text-blue-600",
   },
   {
-    name: "Kerala Backwaters",
-    image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600&q=80",
-    tag: "God's Own Country",
+    icon: Activity,
+    title: "Live Status Simulator",
+    description: "Check real-time weather, crowd levels, and safety conditions at your destination before you go.",
+    color: "bg-orange-100 text-orange-500",
   },
   {
-    name: "Goa Beaches",
-    image: "https://images.unsplash.com/photo-1607823489283-1deb240f9e27?w=600&q=80",
-    tag: "Sun & Sand",
+    icon: Bell,
+    title: "Notification Engine",
+    description: "Get alerts about weather changes, safety conditions, and local events at your saved destinations.",
+    color: "bg-purple-100 text-purple-600",
   },
   {
-    name: "Varanasi Ghats",
-    image: "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=600&q=80",
-    tag: "Spiritual Capital",
+    icon: Users,
+    title: "Listing & Registration",
+    description: "Local hosts and guides register and list their homestays and experiences for travellers to discover.",
+    color: "bg-amber-100 text-amber-600",
   },
   {
-    name: "Mumbai Skyline",
-    image: "https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?w=600&q=80",
-    tag: "City of Dreams",
+    icon: Wifi,
+    title: "Offline/Low Bandwidth Mode",
+    description: "Access saved destinations, maps, and itineraries even in remote areas with poor connectivity.",
+    color: "bg-red-100 text-red-500",
   },
+  {
+    icon: Star,
+    title: "Rating & Review System",
+    description: "Verified reviews and ratings for destinations, hosts, and guides to ensure trustworthy information.",
+    color: "bg-yellow-100 text-yellow-600",
+  },
+  {
+    icon: MapPin,
+    title: "Location Tagging",
+    description: "Tag and organize destinations by category, activity type, and personal interest for easy discovery.",
+    color: "bg-teal-100 text-teal-600",
+  },
+];
+
+const TRUST_STATS = [
+  { icon: Users, value: "5,000+", label: "Local Travellers" },
+  { icon: MapPin, value: "200+", label: "Hidden Destinations" },
+  { icon: Star, value: "4.8", label: "Avg Rating" },
+  { icon: Shield, value: "100%", label: "Verified Hosts" },
 ];
 
 export default function Landing() {
@@ -41,13 +81,12 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col overflow-x-hidden">
-      {/* Hero section with full-screen image */}
+      {/* Hero Section */}
       <div className="relative min-h-screen flex flex-col">
-        {/* Hero background */}
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1548013146-72479768bada?w=1600&q=85"
-            alt="India - Incredible landscapes"
+            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=85"
+            alt="Hidden local destination"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
@@ -57,117 +96,152 @@ export default function Landing() {
         <header className="px-6 py-5 flex items-center justify-between z-10 relative">
           <div className="flex items-center gap-2 text-white">
             <Compass className="w-8 h-8" />
-            <span className="text-2xl font-bold tracking-tight">Traveloop</span>
-            <span className="ml-2 text-xs bg-orange-500 text-white px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider">India</span>
+            <span className="text-2xl font-bold tracking-tight">LocalDiscover</span>
+            <span className="ml-2 text-xs bg-emerald-500 text-white px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider">India</span>
           </div>
-          <Link href="/login">
+          <Link href="/auth">
             <Button
               size="lg"
-              className="font-medium rounded-full px-8 bg-white text-gray-900 hover:bg-orange-50 shadow-lg border-0"
+              className="font-medium rounded-full px-8 bg-white text-gray-900 hover:bg-emerald-50 shadow-lg border-0"
             >
               Log in
             </Button>
           </Link>
         </header>
 
-        {/* Hero content */}
+        {/* Hero Content */}
         <main className="flex-1 flex flex-col items-center justify-center text-center px-4 z-10 relative pb-20">
           <div className="max-w-4xl mx-auto space-y-6">
-            <div className="inline-flex items-center gap-2 bg-orange-500/20 backdrop-blur-sm border border-orange-400/30 text-orange-200 px-4 py-2 rounded-full text-sm font-medium mb-2">
-              <Star className="w-4 h-4 fill-orange-400 text-orange-400" />
-              Explore Incredible India
+            <div className="inline-flex items-center gap-2 bg-emerald-500/20 backdrop-blur-sm border border-emerald-400/30 text-emerald-200 px-4 py-2 rounded-full text-sm font-medium mb-2">
+              <MapPin className="w-4 h-4" />
+              Discover Lesser-Known Local Destinations
             </div>
             <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-lg">
-              Plan your <span className="text-orange-400 italic font-serif">Indian</span><br />
-              adventure here.
+              Explore the <span className="text-emerald-400 italic font-serif">hidden</span><br />
+              gems of India.
             </h1>
             <p className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto leading-relaxed">
-              From the Himalayas to the beaches of Goa — Traveloop is your all-in-one command center for multi-city itineraries, budgets, and packing lists across India.
+              A travel discovery platform helping you find, compare, and book experiences at lesser-known local destinations — with verified hosts, real-time alerts, and offline access.
             </p>
             <div className="pt-6 flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 onClick={login}
-                className="h-14 text-lg rounded-full px-12 bg-orange-500 hover:bg-orange-600 shadow-xl border-0 transition-transform hover:scale-105"
+                className="h-14 text-lg rounded-full px-12 bg-emerald-500 hover:bg-emerald-600 shadow-xl border-0 transition-transform hover:scale-105"
               >
-                Start Planning Now
+                Start Exploring
               </Button>
-              <Button
-                onClick={login}
-                variant="outline"
-                className="h-14 text-lg rounded-full px-10 bg-white/10 backdrop-blur-sm text-white border-white/40 hover:bg-white/20"
-              >
-                Explore Destinations
-              </Button>
+              <Link href="/register">
+                <Button
+                  variant="outline"
+                  className="h-14 text-lg rounded-full px-10 bg-white/10 backdrop-blur-sm text-white border-white/40 hover:bg-white/20"
+                >
+                  Register as Host
+                </Button>
+              </Link>
             </div>
             <div className="flex items-center justify-center gap-8 pt-4 text-white/60 text-sm">
-              <span className="flex items-center gap-1.5"><Users className="w-4 h-4" /> 10,000+ travelers</span>
-              <span className="flex items-center gap-1.5"><Map className="w-4 h-4" /> 50+ Indian cities</span>
-              <span className="flex items-center gap-1.5"><Shield className="w-4 h-4" /> Free to use</span>
+              <span className="flex items-center gap-1.5"><Users className="w-4 h-4" /> 5,000+ travellers</span>
+              <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4" /> 200+ hidden destinations</span>
+              <span className="flex items-center gap-1.5"><Shield className="w-4 h-4" /> Verified hosts</span>
             </div>
           </div>
         </main>
       </div>
 
-      {/* Destination Gallery */}
-      <section className="py-20 px-6 bg-gradient-to-b from-amber-50 to-background">
+      {/* Hidden Gems Gallery */}
+      <section className="py-20 px-6 bg-gradient-to-b from-emerald-50 to-background">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-orange-500 font-semibold text-sm uppercase tracking-wider mb-2">Explore India</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Iconic Destinations Await</h2>
-            <p className="text-muted-foreground mt-3 max-w-xl mx-auto">From ancient temples to pristine beaches, plan your perfect journey across the subcontinent.</p>
+            <p className="text-emerald-600 font-semibold text-sm uppercase tracking-wider mb-2">Hidden Gems</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Destinations You Won't Find in Guidebooks</h2>
+            <p className="text-muted-foreground mt-3 max-w-xl mx-auto">Explore villages, valleys, and coastlines that most tourists never discover.</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {INDIA_DESTINATIONS.map((dest) => (
-              <button
-                key={dest.name}
-                onClick={login}
-                className="group relative rounded-2xl overflow-hidden aspect-[4/3] shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-              >
-                <img
-                  src={dest.image}
-                  alt={dest.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                <div className="absolute bottom-3 left-3 right-3 text-left">
-                  <span className="text-xs bg-orange-500 text-white px-2 py-0.5 rounded-full font-medium">{dest.tag}</span>
-                  <h3 className="text-white font-bold text-sm mt-1 drop-shadow-sm">{dest.name}</h3>
+            {HIDDEN_GEMS.map((gem) => {
+              const place = PLACES.find((p) => p.id === gem.id);
+              if (!place) return null;
+              return (
+                <button
+                  key={gem.id}
+                  onClick={login}
+                  className="group relative rounded-2xl overflow-hidden aspect-[4/3] shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                >
+                  <PlaceImage
+                    place={place}
+                    width={800}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <div className="absolute bottom-3 left-3 right-3 text-left">
+                    <span className="text-xs bg-emerald-500 text-white px-2 py-0.5 rounded-full font-medium">{gem.tag}</span>
+                    <h3 className="text-white font-bold text-sm mt-1 drop-shadow-sm">{place.name}</h3>
+                    <p className="text-white/70 text-xs">{place.region}</p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 px-6 bg-background">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-emerald-600 font-semibold text-sm uppercase tracking-wider mb-2">Platform Features</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Everything you need to travel confidently</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {FEATURES.map((feat) => (
+              <div key={feat.title} className="bg-card p-6 rounded-3xl shadow-sm border border-border/50 hover:shadow-md transition-shadow">
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 ${feat.color}`}>
+                  <feat.icon className="w-6 h-6" />
                 </div>
-              </button>
+                <h3 className="text-lg font-bold mb-2">{feat.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{feat.description}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Features section */}
-      <section className="py-20 px-6 bg-background">
+      {/* How It Works */}
+      <section className="py-20 px-6 bg-emerald-50/50">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-orange-500 font-semibold text-sm uppercase tracking-wider mb-2">Everything you need</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Travel smarter across India</h2>
+            <p className="text-emerald-600 font-semibold text-sm uppercase tracking-wider mb-2">How It Works</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Three steps to your next adventure</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-card p-8 rounded-3xl shadow-sm border border-border/50 hover:shadow-md transition-shadow">
-              <div className="w-14 h-14 rounded-2xl bg-orange-100 flex items-center justify-center text-orange-500 mb-6">
-                <Map className="w-7 h-7" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { step: "01", title: "Discover", desc: "Browse lesser-known destinations filtered by interests, budget, and travel style.", icon: Map },
+              { step: "02", title: "Compare", desc: "View real-time conditions, reviews, and route times to choose the best destination.", icon: Route },
+              { step: "03", title: "Book", desc: "Reserve homestays and experiences directly with verified local hosts and guides.", icon: Calendar },
+            ].map((item) => (
+              <div key={item.step} className="text-center">
+                <div className="w-16 h-16 rounded-2xl bg-emerald-500 flex items-center justify-center mx-auto mb-4">
+                  <item.icon className="w-8 h-8 text-white" />
+                </div>
+                <p className="text-emerald-600 font-bold text-sm mb-1">Step {item.step}</p>
+                <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
               </div>
-              <h3 className="text-xl font-bold mb-3">Multi-City Itineraries</h3>
-              <p className="text-muted-foreground leading-relaxed">Plan the Golden Triangle, Kerala circuit, or your own custom route. Every stop perfectly organized.</p>
-            </div>
-            <div className="bg-card p-8 rounded-3xl shadow-sm border border-border/50 hover:shadow-md transition-shadow">
-              <div className="w-14 h-14 rounded-2xl bg-green-100 flex items-center justify-center text-green-600 mb-6">
-                <Calendar className="w-7 h-7" />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Stats */}
+      <section className="py-16 px-6 bg-background border-t border-border">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {TRUST_STATS.map((stat) => (
+              <div key={stat.label} className="text-center">
+                <stat.icon className="w-6 h-6 text-emerald-500 mx-auto mb-2" />
+                <p className="text-3xl font-bold text-foreground">{stat.value}</p>
+                <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
               </div>
-              <h3 className="text-xl font-bold mb-3">Smart Budgeting</h3>
-              <p className="text-muted-foreground leading-relaxed">Track your INR spending city by city. Get cost estimates based on real traveler data.</p>
-            </div>
-            <div className="bg-card p-8 rounded-3xl shadow-sm border border-border/50 hover:shadow-md transition-shadow">
-              <div className="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 mb-6">
-                <Plane className="w-7 h-7" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">Share the Journey</h3>
-              <p className="text-muted-foreground leading-relaxed">Generate a beautiful public link to share your meticulously planned Indian itinerary with friends and family.</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -176,18 +250,18 @@ export default function Landing() {
       <section className="relative py-24 px-6 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1519302959554-a75be0afc082?w=1400&q=80"
-            alt="India travel"
+            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1400&q=80"
+            alt="Travel adventure"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-orange-900/80" />
+          <div className="absolute inset-0 bg-emerald-900/80" />
         </div>
         <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Ready to explore India?</h2>
-          <p className="text-white/80 text-lg mb-8">Join thousands of travelers planning unforgettable Indian journeys.</p>
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Ready to discover something new?</h2>
+          <p className="text-white/80 text-lg mb-8">Join thousands of travellers exploring India's hidden destinations.</p>
           <Button
             onClick={login}
-            className="h-14 text-lg rounded-full px-12 bg-white text-orange-700 hover:bg-orange-50 shadow-xl border-0 font-semibold transition-transform hover:scale-105"
+            className="h-14 text-lg rounded-full px-12 bg-white text-emerald-700 hover:bg-emerald-50 shadow-xl border-0 font-semibold transition-transform hover:scale-105"
           >
             Get Started Free
           </Button>
@@ -197,10 +271,10 @@ export default function Landing() {
       {/* Footer */}
       <footer className="py-8 px-6 bg-muted/30 text-center text-muted-foreground text-sm">
         <div className="flex items-center justify-center gap-2 mb-2">
-          <Compass className="w-5 h-5 text-orange-500" />
-          <span className="font-semibold text-foreground">Traveloop India</span>
+          <Compass className="w-5 h-5 text-emerald-500" />
+          <span className="font-semibold text-foreground">LocalDiscover India</span>
         </div>
-        <p>Your complete travel planning companion for Incredible India 🇮🇳</p>
+        <p>Your local tourism & travel discovery platform 🇮🇳</p>
       </footer>
     </div>
   );

@@ -49,8 +49,29 @@ const LoginSchema = z.object({
   password: z.string().min(6),
 });
 
-router.get("/auth/user", (req: Request, res: Response) => {
-  res.json({ user: req.isAuthenticated() ? req.user : null });
+router.get("/auth/user", async (req: Request, res: Response) => {
+  if (!req.isAuthenticated()) {
+    res.json({ user: null });
+    return;
+  }
+
+  // Read through to the database so profile edits (name, avatar) show up
+  // immediately instead of serving the snapshot stored in the session.
+  const fresh = await usersTable.findById(req.user.id).lean();
+  if (!fresh) {
+    res.json({ user: null });
+    return;
+  }
+
+  res.json({
+    user: {
+      id: fresh._id.toString(),
+      email: fresh.email ?? null,
+      firstName: fresh.firstName ?? null,
+      lastName: fresh.lastName ?? null,
+      profileImageUrl: fresh.profileImageUrl ?? null,
+    },
+  });
 });
 
 router.post("/register", async (req: Request, res: Response) => {

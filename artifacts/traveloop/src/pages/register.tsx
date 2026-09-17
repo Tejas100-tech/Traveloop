@@ -3,20 +3,20 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Compass, MapPin, Star, Shield, Zap, CheckCircle, AlertCircle, Mail, Lock, User } from "lucide-react";
+import { Compass, MapPin, Star, Shield, Camera, CheckCircle, AlertCircle, Mail, Lock, User } from "lucide-react";
 
 const FEATURES = [
-  { icon: MapPin, title: "Plan India Trips", desc: "Build multi-city itineraries across 50+ Indian destinations", color: "text-orange-500 bg-orange-100" },
-  { icon: Star, title: "Activity Templates", desc: "Pre-loaded activities with ₹ costs for every major Indian city", color: "text-amber-500 bg-amber-100" },
-  { icon: Shield, title: "Budget in INR", desc: "Track spending in Indian Rupees with city-wise breakdowns", color: "text-green-600 bg-green-100" },
-  { icon: Zap, title: "AI Voice Assistant", desc: "Ask our India travel assistant for tips, costs, and recommendations", color: "text-blue-600 bg-blue-100" },
+  { icon: MapPin, title: "Hidden Destinations", desc: "Lesser-known villages, valleys and coastlines across India", color: "text-emerald-600 bg-emerald-100" },
+  { icon: Star, title: "Trusted Reviews", desc: "Verified ratings for destinations, homestays and local guides", color: "text-amber-500 bg-amber-100" },
+  { icon: Shield, title: "Live Conditions", desc: "Weather, safety, crowd and connectivity before you travel", color: "text-blue-600 bg-blue-100" },
+  { icon: Camera, title: "Offline Ready", desc: "Save places, maps and contacts for low-signal areas", color: "text-purple-600 bg-purple-100" },
 ];
 
 const DESTINATIONS = [
-  { name: "Taj Mahal", state: "Uttar Pradesh", img: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=400&q=75" },
-  { name: "Jaipur", state: "Rajasthan", img: "https://images.unsplash.com/photo-1477587458883-47145ed94245?w=400&q=75" },
-  { name: "Kerala", state: "God's Own Country", img: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=400&q=75" },
-  { name: "Goa", state: "Beach Paradise", img: "https://images.unsplash.com/photo-1607823489283-1deb240f9e27?w=400&q=75" },
+  { name: "Spiti Valley", state: "Himachal Pradesh", img: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=75" },
+  { name: "Mawlynnong", state: "Meghalaya", img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&q=75" },
+  { name: "Gandikota", state: "Andhra Pradesh", img: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=400&q=75" },
+  { name: "Gokarna", state: "Karnataka", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=75" },
 ];
 
 export default function Register() {
@@ -36,7 +36,7 @@ export default function Register() {
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
       if (res.ok) {
         window.location.href = "/";
@@ -44,7 +44,7 @@ export default function Register() {
         const data = await res.json();
         setErrorMsg(data.error || "Registration failed");
       }
-    } catch (err) {
+    } catch {
       setErrorMsg("Network error. Please try again.");
     } finally {
       setLoading(false);
@@ -53,126 +53,147 @@ export default function Register() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border px-6 py-4 flex items-center justify-between">
+      <header className="sticky top-0 z-50 flex items-center justify-between border-b border-border bg-background/80 px-6 py-4 backdrop-blur-sm">
         <Link href="/">
-          <div className="flex items-center gap-2 text-orange-500 cursor-pointer">
-            <Compass className="w-7 h-7" />
-            <span className="text-xl font-bold">Traveloop</span>
-            <span className="text-xs bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full font-semibold">India</span>
+          <div className="flex cursor-pointer items-center gap-2 text-emerald-600">
+            <Compass className="h-7 w-7" />
+            <span className="text-xl font-bold">LocalDiscover</span>
           </div>
         </Link>
-        <Link href="/login">
-          <Button
-            variant="outline"
-            className="rounded-full px-6 border-orange-300 text-orange-600 hover:bg-orange-50 cursor-pointer"
-          >
-            Sign In
-          </Button>
-        </Link>
+        <div className="flex items-center gap-3">
+          <span className="hidden text-sm text-muted-foreground sm:inline">Already have an account?</span>
+          <Link href="/login">
+            <Button variant="outline" className="cursor-pointer rounded-full border-emerald-300 px-6 text-emerald-700 hover:bg-emerald-50">
+              Log in
+            </Button>
+          </Link>
+        </div>
       </header>
 
-      <div className="max-w-5xl mx-auto px-6 py-12 space-y-16">
-        {/* Hero */}
-        <div className="text-center space-y-6">
-          <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-semibold">
-            🇮🇳 Free for Indian Travelers
+      <div className="mx-auto grid max-w-6xl gap-10 px-6 py-12 lg:grid-cols-2 lg:items-center">
+        {/* Form */}
+        <div className="mx-auto w-full max-w-md space-y-7">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+              <MapPin className="h-3 w-3" /> Start exploring
+            </div>
+            <h1 className="text-3xl font-bold tracking-tight">Create your account</h1>
+            <p className="text-sm text-muted-foreground">
+              Discover lesser-known local destinations, compare hosts and guides, and travel with
+              real-time information.
+            </p>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight">
-            Plan your perfect<br />
-            <span className="text-orange-500">India adventure</span>
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-            Join thousands of travelers using Traveloop to plan multi-city Indian trips — with ₹ budgets, activity templates, and an AI travel assistant.
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="firstName" className="text-sm font-medium">First name</Label>
+                <div className="relative">
+                  <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    id="firstName"
+                    placeholder="First name"
+                    className="h-11 rounded-xl pl-10"
+                    value={formData.firstName}
+                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="lastName" className="text-sm font-medium">Last name</Label>
+                <Input
+                  id="lastName"
+                  placeholder="Last name"
+                  className="h-11 rounded-xl"
+                  value={formData.lastName}
+                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="email" className="text-sm font-medium">Email address</Label>
+              <div className="relative">
+                <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  className="h-11 rounded-xl pl-10"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="password" className="text-sm font-medium">Password</Label>
+              <div className="relative">
+                <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="password"
+                  type="password"
+                  autoComplete="new-password"
+                  placeholder="At least 6 characters"
+                  className="h-11 rounded-xl pl-10"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                />
+              </div>
+            </div>
+
+            {errorMsg && (
+              <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                <AlertCircle className="h-4 w-4 shrink-0" />
+                {errorMsg}
+              </div>
+            )}
+
+            <Button
+              disabled={loading}
+              type="submit"
+              className="h-11 w-full rounded-xl border-0 bg-emerald-500 text-white hover:bg-emerald-600"
+            >
+              {loading ? "Creating account…" : "Create free account"}
+            </Button>
+          </form>
+
+          <p className="text-center text-sm text-muted-foreground">
+            Already registered?{" "}
+            <Link href="/login">
+              <span className="cursor-pointer font-semibold text-emerald-600 hover:underline">Log in</span>
+            </Link>
           </p>
-
-          {/* Form */}
-          <div className="max-w-md mx-auto bg-card border border-border p-6 rounded-2xl shadow-sm text-left mt-8">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <Label htmlFor="firstName">First name</Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input id="firstName" className="pl-10" value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} />
-                  </div>
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="lastName">Last name</Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input id="lastName" className="pl-10" value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} />
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="email">Email</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input id="email" type="email" required className="pl-10" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="password">Password</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input id="password" type="password" required className="pl-10" value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} />
-                </div>
-              </div>
-
-              {errorMsg && (
-                <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700 flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  {errorMsg}
-                </div>
-              )}
-
-              <Button disabled={loading} type="submit" className="w-full h-11 bg-orange-500 hover:bg-orange-600 text-white rounded-xl">
-                {loading ? "Creating account..." : "Create Free Account"}
-              </Button>
-            </form>
-          </div>
-
-          <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground pt-2">
-            {["No credit card required", "100% free to use", "Instant access"].map(item => (
-              <span key={item} className="flex items-center gap-1.5">
-                <CheckCircle className="w-4 h-4 text-green-500" /> {item}
-              </span>
-            ))}
-          </div>
         </div>
 
-        {/* Destination Preview */}
-        <div>
-          <p className="text-center text-sm text-muted-foreground font-medium uppercase tracking-wider mb-6">Explore 50+ Indian destinations</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {DESTINATIONS.map(dest => (
-              <div key={dest.name} className="relative rounded-2xl overflow-hidden aspect-[3/4] group">
-                <img src={dest.img} alt={dest.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                <div className="absolute bottom-3 left-3">
-                  <p className="text-white font-bold text-sm">{dest.name}</p>
-                  <p className="text-white/70 text-xs flex items-center gap-1"><MapPin className="w-3 h-3" />{dest.state}</p>
+        {/* Visual */}
+        <div className="hidden space-y-6 lg:block">
+          <div className="grid grid-cols-2 gap-3">
+            {DESTINATIONS.map((d) => (
+              <div key={d.name} className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-md">
+                <img src={d.img} alt={d.name} className="h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                <div className="absolute bottom-2 left-3 right-3">
+                  <p className="text-sm font-bold leading-tight text-white">{d.name}</p>
+                  <p className="flex items-center gap-0.5 text-[10px] text-white/70">
+                    <MapPin className="h-2.5 w-2.5" />
+                    {d.state}
+                  </p>
                 </div>
               </div>
             ))}
           </div>
-        </div>
 
-        {/* Features */}
-        <div>
-          <h2 className="text-2xl font-bold text-center mb-8">Everything you need to travel India</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {FEATURES.map(f => (
-              <div key={f.title} className="bg-card border border-border rounded-2xl p-6 flex gap-4 hover:shadow-md transition-shadow">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${f.color}`}>
-                  <f.icon className="w-6 h-6" />
+          <div className="space-y-2.5">
+            {FEATURES.map((f) => (
+              <div key={f.title} className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4">
+                <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${f.color}`}>
+                  <f.icon className="h-4.5 w-4.5" />
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-1">{f.title}</h3>
-                  <p className="text-muted-foreground text-sm">{f.desc}</p>
+                  <p className="text-sm font-semibold">{f.title}</p>
+                  <p className="text-xs text-muted-foreground">{f.desc}</p>
                 </div>
               </div>
             ))}

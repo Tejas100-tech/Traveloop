@@ -1,21 +1,25 @@
 import { Link, useLocation } from "wouter";
-import { LayoutDashboard, Plane, PlusCircle, Globe, User, LogOut, Compass, Menu, X, Users } from "lucide-react";
+import { LayoutDashboard, Map, MapPin, Route, Activity, Bell, Users, Star, Wifi, Globe, LogOut, Compass, Menu, Settings } from "lucide-react";
 import { useAuth } from "@workspace/replit-auth-web";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 const nav = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/trips", label: "My Trips", icon: Plane },
-  { href: "/trips/new", label: "Plan New Trip", icon: PlusCircle },
-  { href: "/cities", label: "City Explorer", icon: Globe },
-  { href: "/community", label: "Community", icon: Users },
-  { href: "/profile", label: "Profile", icon: User },
+  { href: "/destinations", label: "Destinations", icon: Map },
+  { href: "/map", label: "Interactive Map", icon: Globe },
+  { href: "/routes", label: "Route Calculator", icon: Route },
+  { href: "/live-status", label: "Live Status", icon: Activity },
+  { href: "/listings", label: "Hosts & Guides", icon: Users },
+  { href: "/reviews", label: "Reviews", icon: Star },
+  { href: "/notifications", label: "Notifications", icon: Bell },
+  { href: "/offline", label: "Offline Mode", icon: Wifi },
+  { href: "/profile", label: "Profile", icon: Settings },
 ];
 
 function NavLink({ href, label, Icon, current }: { href: string; label: string; Icon: React.ElementType; current: boolean }) {
   return (
-    <Link href={href} className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${current ? "bg-orange-500 text-white shadow-sm shadow-orange-500/30" : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground"}`}>
+    <Link href={href} className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${current ? "bg-emerald-500 text-white shadow-sm shadow-emerald-500/30" : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground"}`}>
       <Icon className="w-4.5 h-4.5 shrink-0" />
       {label}
     </Link>
@@ -29,27 +33,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   function isCurrent(href: string) {
     if (href === "/") return location === "/";
-    if (href === "/trips") return location === "/trips";
     return location.startsWith(href);
   }
 
   const avatar = user?.profileImageUrl
     ? <img src={user.profileImageUrl} alt="" className="w-8 h-8 rounded-full object-cover" />
-    : <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center text-primary text-sm font-bold">{(user?.firstName?.[0] || "U").toUpperCase()}</div>;
+    : <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-sm font-bold">{(user?.firstName?.[0] || "U").toUpperCase()}</div>;
 
   const sidebar = (
     <div className="flex flex-col h-full">
       <div className="px-5 py-5">
-        <Link href="/" className="flex items-center gap-2.5 text-orange-500" onClick={() => setMobileOpen(false)}>
-          <div className="w-8 h-8 rounded-xl bg-orange-500 flex items-center justify-center">
+        <Link href="/" className="flex items-center gap-2.5 text-emerald-500" onClick={() => setMobileOpen(false)}>
+          <div className="w-8 h-8 rounded-xl bg-emerald-500 flex items-center justify-center">
             <Compass className="w-5 h-5 text-white" />
           </div>
-          <span className="text-xl font-bold tracking-tight">Traveloop</span>
-          <span className="text-xs bg-orange-100 text-orange-600 px-1.5 py-0.5 rounded-full font-semibold">India</span>
+          <span className="text-xl font-bold tracking-tight">LocalDiscover</span>
         </Link>
       </div>
 
-      <nav className="flex-1 px-3 space-y-0.5">
+      <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto">
         {nav.map(({ href, label, icon: Icon }) => (
           <div key={href} onClick={() => setMobileOpen(false)}>
             <NavLink href={href} label={label} Icon={Icon} current={isCurrent(href)} />
@@ -95,9 +97,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <button onClick={() => setMobileOpen(true)} className="p-1.5 rounded-lg hover:bg-sidebar-accent">
             <Menu className="w-5 h-5" />
           </button>
-          <Link href="/" className="flex items-center gap-2 text-primary">
+          <Link href="/" className="flex items-center gap-2 text-emerald-500">
             <Compass className="w-6 h-6" />
-            <span className="text-lg font-bold">Traveloop</span>
+            <span className="text-lg font-bold">LocalDiscover</span>
           </Link>
           {avatar}
         </header>

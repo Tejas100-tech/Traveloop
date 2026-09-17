@@ -20,7 +20,7 @@ router.post("/reviews", async (req, res): Promise<void> => {
     res.status(401).json({ error: "Unauthorized" });
     return;
   }
-  const { tripName, cities, rating, title, body, travelMonth, travelStyle } = req.body;
+  const { tripName, cities, rating, title, body, travelMonth, travelStyle, category } = req.body;
   if (!tripName || typeof tripName !== "string" || tripName.trim().length === 0) {
     res.status(400).json({ error: "tripName is required" });
     return;
@@ -55,6 +55,7 @@ router.post("/reviews", async (req, res): Promise<void> => {
     body: body.trim().slice(0, 2000),
     travelMonth: travelMonth ?? null,
     travelStyle: travelStyle ?? null,
+    category: category ?? "Destination",
   });
 
   res.status(201).json({ 

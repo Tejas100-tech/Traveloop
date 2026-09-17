@@ -1,5 +1,5 @@
 import { Router, type IRouter, type Request, type Response } from "express";
-import { usersTable, tripsTable } from "@workspace/db";
+import { usersTable, reviewsTable } from "@workspace/db";
 import { clearSession, getSessionId } from "../lib/auth";
 import crypto from "crypto";
 
@@ -52,7 +52,7 @@ router.delete("/users/me", async (req: Request, res: Response): Promise<void> =>
 
   const userId = req.user.id;
 
-  await tripsTable.deleteMany({ userId });
+  await reviewsTable.deleteMany({ userId });
   await usersTable.deleteOne({ _id: userId });
 
   const sid = getSessionId(req);
