@@ -10,7 +10,7 @@ A Local Tourism & Travel Discovery Platform helping travellers discover and plan
 - `pnpm run build` — typecheck + build all packages
 - Required env: `MONGO_URI` — MongoDB connection string
 - Required env: `SESSION_SECRET` — session signing secret
-- Optional env: `GOOGLE_MAPS_API_KEY` — browser key for the live map (`GET /api/config` serves it; without it the map falls back to a plotted view)
+- Optional env: `GOOGLE_MAPS_API_KEY` — browser key for the live map *and* real route times; enable Maps JavaScript API + Routes API (`GET /api/config` serves it; without it the map falls back to a plotted view and routes are straight-line estimates)
 - Optional env: `CLOUDINARY_CLOUD_NAME` / `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET` — profile avatar uploads
 
 ## Stack

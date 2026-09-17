@@ -88,8 +88,10 @@ loads automatically):
 MONGO_URI="your_mongodb_connection_string"
 SESSION_SECRET=your_session_secret
 
-# Optional — enables the live Google Map (Maps JavaScript API).
-# Without it the Interactive Map falls back to an accurate plotted view.
+# Optional — powers the live Google Map and real road/walk/transit times.
+# Enable both "Maps JavaScript API" and "Routes API" on the key.
+# Without it the map falls back to a plotted view and the route calculator
+# estimates from straight-line distance.
 GOOGLE_MAPS_API_KEY="your_browser_key"
 
 # Optional — avatar uploads on the profile page.
@@ -98,9 +100,16 @@ CLOUDINARY_API_KEY="..."
 CLOUDINARY_API_SECRET="..."
 ```
 
-`GOOGLE_MAPS_API_KEY` is a **browser** key: enable *Maps JavaScript API* and
-restrict the key to your HTTP referrers. The API server serves it at runtime via
-`GET /api/config`, so rotating it needs no frontend rebuild.
+`GOOGLE_MAPS_API_KEY` is a **browser** key. Enable **Maps JavaScript API** (the
+map) and **Routes API** (the Route & Time Calculator), then restrict the key to
+your HTTP referrers — without that restriction anyone can spend your quota. The
+API server serves it at runtime via `GET /api/config`, so rotating it needs no
+frontend rebuild.
+
+One key drives both features deliberately: `src/lib/google-routes.ts` reads the
+same runtime config the map does, so there is a single value to set and rotate.
+Google is never asked for fares — fuel figures shown next to a route are labelled
+estimates derived from distance.
 
 ### 3. Build & Start
 ```bash
